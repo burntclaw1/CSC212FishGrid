@@ -27,6 +27,8 @@ public class World {
 	 * A reference to a random object, so we can randomize placement of objects in this world.
 	 */
 	private Random rand = ThreadLocalRandom.current();
+	
+	private Fish[] home;
 
 	/**
 	 * Create a new world of a given width and height.
@@ -152,9 +154,18 @@ public class World {
 	 * @return the Rock.
 	 */
 	public Rock insertRockRandomly() {
+		if(Math.random()<0.5)
+		{
+			Rock a=new FallingRock(this);
+			insertRandomly(a);
+			return a;
+		}
+		else
+		{
 		Rock r = new Rock(this);
 		insertRandomly(r);
 		return r;
+		}
 	}
 	
 	/**
@@ -163,7 +174,7 @@ public class World {
 	 * @return the new fish itself.
 	 */
 	public Fish insertFishRandomly(int color) {
-		Fish f = new Fish(color, this);
+		Fish f = new Fish(color, this, Math.random());
 		insertRandomly(f);
 		return f;
 	}
@@ -184,6 +195,12 @@ public class World {
 		return snail;
 	}
 	
+	public FishFood insertFoodRandomly() {
+		FishFood food = new FishFood(this);
+		insertRandomly(food);
+		return food;
+	}
+	
 	/**
 	 * Determine if a WorldObject can swim to a particular point.
 	 * 
@@ -202,6 +219,7 @@ public class World {
 		
 		// We will need to look at who all is in the spot to determine if we can move there.
 		List<WorldObject> inSpot = this.find(x, y);
+		if(y<height)
 		
 		for (WorldObject it : inSpot) {
 			// TODO(FishGrid): Don't let us move over rocks as a Fish.
@@ -209,6 +227,14 @@ public class World {
 			if (it instanceof Snail) {
 				// This if-statement doesn't let anyone step on the Snail.
 				// The Snail(s) are not gonna take it.
+				return false;
+			}
+			else if(it instanceof Rock)
+			{
+				return false;
+			}
+			else if(it instanceof Fish && !isPlayer)
+			{
 				return false;
 			}
 		}
@@ -234,15 +260,17 @@ public class World {
 	 */
 	public static void objectsFollow(WorldObject target, List<? extends WorldObject> followers) {
 		// TODO(FishGrid) Comment this method!
-		// What is recentPositions?
-		// What is followers?
-		// What is target?
+		// What is recentPositions? recentPositions is a queue of x and y coordinates (i.e. positions) that the player has been through for the past 64 movements. 
+		// What is followers? A list of the found fish in the game.
+		// What is target? In the FishGame class, the target is the Player, which is what the arraylist of followers, which are the found fish, follow. 
 		// Why is past = putWhere[i+1]? Why not putWhere[i]?
 		List<IntPoint> putWhere = new ArrayList<>(target.recentPositions);
-		for (int i=0; i < followers.size() && i+1 < putWhere.size(); i++) {
-			// What is the deal with the two conditions in this for-loop?
-			IntPoint past = putWhere.get(i+1);
-			followers.get(i).setPosition(past.x, past.y);
+		for (int i=0; i < followers.size() && i+1 < putWhere.size(); i++) {//for each follower in the arraylist, the follower's position is set to the position that corresponds to where the player has been. If the follower is the first in the list, it will be in the block where the player had immediately been to last, and if it is second, it will be the second one that the player had been too, etc. 
+			// What is the deal with the two conditions in this for-loop? It ensures that every follower in the followers arraylist gets set a new position behind the player, and that each follower gets placed into a position that is NOT the player's position (i.e. 1 less than the size of putWhere()).
+			IntPoint past = putWhere.get(i+1);//ensures that the follower never selects putwhere.get(0), which is the player's current position. This means that the follower will never overlap with the player.
+			followers.get(i).setPosition(past.x, past.y);//set the follower's position to the player's previous nth position depending on the follower's index in the arraylist.
 		}
 	}
+	
+	
 }

@@ -284,5 +284,6 @@ public abstract class WorldObject {
 	 * Abstract so that Fish and Rock, etc. MUST implement!
 	 */
 	public abstract void step();
+	
 
 }

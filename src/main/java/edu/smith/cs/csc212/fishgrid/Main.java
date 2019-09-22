@@ -16,14 +16,10 @@ import me.jjfoley.gfx.TextBox;
  * @author jfoley
  */
 public class Main extends GFX {
-	/**
-	 * Game size (visual). TODO(lab) Try changing this to 600.
-	 */
-	public static int VISUAL_GRID_SIZE = 400;
-	/**
-	 * Game size (logical). TODO(lab) Try changing this to 15 or so.
-	 */
-	public static int LOGICAL_GRID_SIZE = 10;
+
+	public static int VISUAL_GRID_SIZE = 600;
+
+	public static int LOGICAL_GRID_SIZE = 15;
 	/**
 	 * The words appear in the top part of the screen.
 	 */
@@ -50,7 +46,7 @@ public class Main extends GFX {
 	 */
 	public Main() {
 		super(VISUAL_GRID_SIZE + BORDER * 2, VISUAL_GRID_SIZE + BORDER * 2 + TOP_PART);
-		game = new FishGame(LOGICAL_GRID_SIZE, LOGICAL_GRID_SIZE);
+		game = new FishGame(LOGICAL_GRID_SIZE, LOGICAL_GRID_SIZE, 10, 5);
 		gameState.color = Color.WHITE;
 		gameState.setFont(TextBox.BOLD_FONT);
 		gameState.setFontSize(TOP_PART / 3.0);
@@ -164,7 +160,7 @@ public class Main extends GFX {
 		if (game.gameOver()) {
 			this.gameState.setString("You win! Click anywhere start again!");
 			if (this.processClick() != null) {
-				this.game = new FishGame(LOGICAL_GRID_SIZE, LOGICAL_GRID_SIZE);
+				this.game = new FishGame(LOGICAL_GRID_SIZE, LOGICAL_GRID_SIZE, 10, 5);
 			}
 			return;
 		}

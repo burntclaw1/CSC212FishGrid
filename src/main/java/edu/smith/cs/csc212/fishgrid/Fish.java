@@ -18,7 +18,9 @@ public class Fish extends WorldObject {
 	static Color[] COLORS = {
 			Color.red,
 			Color.green,
-			Color.yellow
+			Color.yellow,
+			Color.gray,
+			Color.pink
 			// TODO: (lab) Add more colors.
 			// TODO: (FishGrid) Maybe make a special fish that is more points?
 	};
@@ -31,6 +33,7 @@ public class Fish extends WorldObject {
 	 */
 	boolean player = false;
 	
+	private boolean isScared;
 	/**
 	 * Called only on the Fish that is the player!
 	 */
@@ -38,15 +41,44 @@ public class Fish extends WorldObject {
 		this.player = true;
 	}
 
+	private int points;
 
 	/**
 	 * A Fish knows what World it belongs to, because all WorldObjects do.
 	 * @param color Color by number.
 	 * @param world The world itself.
 	 */
-	public Fish(int color, World world) {
+	public Fish(int color, World world, double isScared) {
 		super(world);
 		this.color = color;
+		if(isScared<0.5)
+		{
+		this.isScared=false;
+		}
+		else
+		{
+			this.isScared=true;
+		}
+		if(COLORS[color]==Color.yellow)
+		{
+			points=50;
+		}
+		else if(COLORS[color]==Color.green)
+		{
+			points=10;
+		}
+		else if(COLORS[color]==Color.gray)
+		{
+			points=20;
+		}
+		else if(COLORS[color]==Color.pink)
+		{
+			points=40;
+		}
+		else
+		{
+			points=10;
+		}
 	}
 	
 	/**
@@ -108,5 +140,14 @@ public class Fish extends WorldObject {
 	@Override
 	public void step() {
 		// Fish are controlled at a higher level; see FishGame.
+	}
+	
+	public boolean isScared()
+	{
+		return isScared;
+	}
+
+	public int getPoints() {
+		return points;
 	}
 }

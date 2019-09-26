@@ -1,3 +1,5 @@
+//CITATION: https://github.com/jjfiv/CSC212FishGrid. 
+
 package edu.smith.cs.csc212.fishgrid;
 
 import java.awt.Graphics2D;

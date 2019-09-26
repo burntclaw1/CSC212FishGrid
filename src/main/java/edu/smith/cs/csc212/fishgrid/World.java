@@ -1,3 +1,5 @@
+//CITATION: https://github.com/jjfiv/CSC212FishGrid. 
+
 package edu.smith.cs.csc212.fishgrid;
 
 import java.util.*;
@@ -154,11 +156,11 @@ public class World {
 	 * @return the Rock.
 	 */
 	public Rock insertRockRandomly() {
-		if(Math.random()<0.5)
+		if(Math.random()<0.5)//less than 50% of the time, the rock inserted will be a fallingrock instead of a regular rock.
 		{
-			Rock a=new FallingRock(this);
-			insertRandomly(a);
-			return a;
+			Rock a=new FallingRock(this);//instantiate a new falling rock.
+			insertRandomly(a);//insert that rock randomly into the map.
+			return a;//then return the rock.
 		}
 		else
 		{
@@ -214,26 +216,20 @@ public class World {
 			return false;
 		}
 		
-		// This will be important.
 		boolean isPlayer = whoIsAsking.isPlayer();
 		
-		// We will need to look at who all is in the spot to determine if we can move there.
 		List<WorldObject> inSpot = this.find(x, y);
 		if(y<height)
 		
 		for (WorldObject it : inSpot) {
-			// TODO(FishGrid): Don't let us move over rocks as a Fish.
-			// The other fish shouldn't step "on" the player, the player should step on the other fish.
 			if (it instanceof Snail) {
-				// This if-statement doesn't let anyone step on the Snail.
-				// The Snail(s) are not gonna take it.
 				return false;
 			}
-			else if(it instanceof Rock)
+			else if(it instanceof Rock) //if the object that the player wants to step on is an instance of a rock, the canSwim() method should return false, as you cannot swim onto a rock.
 			{
 				return false;
 			}
-			else if(it instanceof Fish && !isPlayer)
+			else if(it instanceof Fish && !isPlayer)//if you are not the player, you cannot step onto "it" if it is a fish. This is no longer true if it is the player, hence I needed to put the statement !isPlayer.
 			{
 				return false;
 			}
@@ -258,17 +254,16 @@ public class World {
 	 * @param target the leader.
 	 * @param followers a set of objects to follow the leader.
 	 */
-	public static void objectsFollow(WorldObject target, List<? extends WorldObject> followers) {
-		// TODO(FishGrid) Comment this method!
+	public static void objectsFollow(WorldObject target, List<? extends WorldObject> followers) {//? extends WorldObject means that the List can hold objects of type WorldObject. Since any subclass of WorldObject has an is-a relationship with the superclass WorldObject, this means that this list can hold any object created from a subclass of WorldObject.
 		// What is recentPositions? recentPositions is a queue of x and y coordinates (i.e. positions) that the player has been through for the past 64 movements. 
-		// What is followers? A list of the found fish in the game.
-		// What is target? In the FishGame class, the target is the Player, which is what the arraylist of followers, which are the found fish, follow. 
-		// Why is past = putWhere[i+1]? Why not putWhere[i]?
+		// What is followers? A list of the found fish in the game. These are the fish that the player at some point has overlapped with and are no longer lost. These fish are supposed to follow the player by filling in the spaces behind the player in order.
+		// What is target? In the FishGame class, the target is the Player, which is what the arraylist of followers, the found fish, follow. 
+		// Why is past = putWhere[i+1]? Why not putWhere[i]? i by itself indicates the follower's position in the list of followers. We are using the same iterator for the list of available positions behind the player, and since the list of available positions includes the player's current position, the fish have to follow the player at a position that is after their own position in the followers list. In the 0th position in the ArrayList lies the Player's position. Therefore, the first following fish, which is at array position 0 in the follower's list, has to be at position 1 in the player's recent positions in order for it to be trailing after the player and take the position immediately after the player. The second fish at position 1 of the follower array has to be at position 2 in the recentPositions array, and so on. Therefore, it is i+1 and not i.
 		List<IntPoint> putWhere = new ArrayList<>(target.recentPositions);
 		for (int i=0; i < followers.size() && i+1 < putWhere.size(); i++) {//for each follower in the arraylist, the follower's position is set to the position that corresponds to where the player has been. If the follower is the first in the list, it will be in the block where the player had immediately been to last, and if it is second, it will be the second one that the player had been too, etc. 
-			// What is the deal with the two conditions in this for-loop? It ensures that every follower in the followers arraylist gets set a new position behind the player, and that each follower gets placed into a position that is NOT the player's position (i.e. 1 less than the size of putWhere()).
-			IntPoint past = putWhere.get(i+1);//ensures that the follower never selects putwhere.get(0), which is the player's current position. This means that the follower will never overlap with the player.
-			followers.get(i).setPosition(past.x, past.y);//set the follower's position to the player's previous nth position depending on the follower's index in the arraylist.
+			// What is the deal with the two conditions in this for-loop? Since each follower has to be put in the i+1 position behind the player (As explained before, since the follower cannot overlap with the player), you have to check if i+1 is less than the position array's size itself, otherwise you will get an index out of bounds error (which also means that the game didn't remember enough of the player's recent positions to support anymore following fish). You also still have to make sure you are still doing the operation on each follower, in order, in the followers array, hence the statement i<followers.size().
+			IntPoint past = putWhere.get(i+1);//ensures that the follower never selects putwhere.get(0), which is the player's current position. This means that the follower will never overlap with the player. Furthermore, the first follower in position 0 will be in the 1st position in recent positions, which is the position that the player had just been to. The second follower in the 1st position in the followers array will be in the 2nd position in the recent positions array. Hence the ith follower will be in the i+1st position in the player's recent positions list.
+			followers.get(i).setPosition(past.x, past.y);//set the follower's position to the position behind the player depending on the follower's index in the arraylist. This updates each follower's position so that they are in the corresponding position (As noted several times above) behind the player.
 		}
 	}
 	

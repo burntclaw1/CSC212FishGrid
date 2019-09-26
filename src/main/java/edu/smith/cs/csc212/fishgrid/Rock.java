@@ -1,3 +1,5 @@
+//CITATION: https://github.com/jjfiv/CSC212FishGrid. 
+
 package edu.smith.cs.csc212.fishgrid;
 
 import java.awt.Color;
@@ -27,7 +29,6 @@ public class Rock extends WorldObject {
 			new Color(72,60,50)
 	};
 	
-	// TODO(lab): introduce a variable that is part of the class (one per Rock object) here that indexes the ROCK_COLORS array.
 	private Color color;
 	/**
 	 * Construct a Rock in our world.
@@ -35,10 +36,8 @@ public class Rock extends WorldObject {
 	 */
 	public Rock(World world) {
 		super(world);
-		// TODO(lab): initialize your rock color index to a random number!
-		// Note that all WorldObjects have a ``rand`` available so you don't need to make one.
-		int index=(int)(Math.random()*ROCK_COLORS.length);
-		color=ROCK_COLORS[index];
+		int index=(int)(Math.random()*ROCK_COLORS.length);//It is Math.random()*ROCK_COLORS.length and not length-1 because Math.random() returns a number from 0 to 1 exclusive of 1, meaning that Math.random()*length will never return the length of the array. When it is casted as an integer, the way java rounds integers causes the number to range from 0 to ROCK_COLORS.length-1, which is exactly from the first element 0 to the last element ROCK_COLORS.length
+		color=ROCK_COLORS[index];//this rock object therefore is assigned a  color value from a randomly generated position in the array.
 	}
 
 	/**
@@ -46,8 +45,7 @@ public class Rock extends WorldObject {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		// TODO(lab): use the right color in here...
-		g.setColor(color);
+		g.setColor(color);//Set the color now to the newly declared instance variable color.
 		RoundRectangle2D rock = new RoundRectangle2D.Double(-.5,-.5,1,1,0.3,0.3);
 		g.fill(rock);
 	}

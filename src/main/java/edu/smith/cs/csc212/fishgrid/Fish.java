@@ -1,3 +1,5 @@
+//CITATION: https://github.com/jjfiv/CSC212FishGrid. 
+
 package edu.smith.cs.csc212.fishgrid;
 
 import java.awt.Color;
@@ -21,8 +23,6 @@ public class Fish extends WorldObject {
 			Color.yellow,
 			Color.gray,
 			Color.pink
-			// TODO: (lab) Add more colors.
-			// TODO: (FishGrid) Maybe make a special fish that is more points?
 	};
 	/**
 	 * This is an index into the {@link #COLORS} array.
@@ -33,7 +33,7 @@ public class Fish extends WorldObject {
 	 */
 	boolean player = false;
 	
-	private boolean isScared;
+	private boolean isScared; //whether or not the fish in question is scared or not. Each fish is either isScared or !isScared, hence why I put it as an instance variable.
 	/**
 	 * Called only on the Fish that is the player!
 	 */
@@ -48,10 +48,10 @@ public class Fish extends WorldObject {
 	 * @param color Color by number.
 	 * @param world The world itself.
 	 */
-	public Fish(int color, World world, double isScared) {
+	public Fish(int color, World world, double isScared) {//here, isScared is a parameter of type double because I want each fish to be randomized as isScared, and Math.random(), which returns a double, is a good means of doing this.
 		super(world);
 		this.color = color;
-		if(isScared<0.5)
+		if(isScared<0.5)//half of the time, the parameter Math.random() will return a double less than 0.5. This means that half of the time, the fish are scared and half of the time, the fish will be lazy.
 		{
 		this.isScared=false;
 		}
@@ -59,7 +59,7 @@ public class Fish extends WorldObject {
 		{
 			this.isScared=true;
 		}
-		if(COLORS[color]==Color.yellow)
+		if(COLORS[color]==Color.yellow)//defining the points collected by the player depending on the color of the fish.
 		{
 			points=50;
 		}
@@ -109,7 +109,7 @@ public class Fish extends WorldObject {
 		Shape tail = new Ellipse2D.Double(+.2, -.3, .2, .6);
 		Shape eye = new Ellipse2D.Double(-.25, -.1, .1, .1);
 		
-		Color color = getColor();
+		Color color = getColor();//Selects the color by pulling out the color in the COLORS array at the index color. 
 		Color tailColor = color.darker();
 
 		
@@ -141,7 +141,7 @@ public class Fish extends WorldObject {
 	public void step() {
 		// Fish are controlled at a higher level; see FishGame.
 	}
-	
+	//getters.
 	public boolean isScared()
 	{
 		return isScared;

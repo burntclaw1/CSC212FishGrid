@@ -1,3 +1,5 @@
+//CITATION: https://github.com/jjfiv/CSC212FishGrid. 
+
 package edu.smith.cs.csc212.fishgrid;
 
 import java.awt.Color;
@@ -17,7 +19,7 @@ import me.jjfoley.gfx.TextBox;
  */
 public class Main extends GFX {
 
-	public static int VISUAL_GRID_SIZE = 600;
+	public static int VISUAL_GRID_SIZE = 800;
 
 	public static int LOGICAL_GRID_SIZE = 15;
 	/**

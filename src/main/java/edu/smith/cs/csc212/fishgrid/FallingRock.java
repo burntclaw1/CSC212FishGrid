@@ -9,10 +9,9 @@ public class FallingRock extends Rock {
 	@Override
 	public void step()
 	{
-		if(world.canSwim(this, getX(), getY()-1))
-				{
+				
 		this.moveDown();
-	}
+	
 	
 }
 }
